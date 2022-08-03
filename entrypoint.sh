@@ -18,7 +18,7 @@ cat /tmp/changed_python_files.txt
 set -o pipefail
 
 # If no arguments are given use current working directory
-black_args=(".")
+black_args=("")
 if [[ "$#" -eq 0 && "${INPUT_BLACK_ARGS}" != "" ]]; then
   black_args+=(${INPUT_BLACK_ARGS})
 elif [[ "$#" -ne 0 && "${INPUT_BLACK_ARGS}" != "" ]]; then
@@ -27,7 +27,6 @@ elif [[ "$#" -ne 0 && "${INPUT_BLACK_ARGS}" == "" ]]; then
   black_args+=($*)
 else
   # Default (if no args provided).
-  black_args+=("--check" "--diff")
 fi
 
 # Check if formatting was requested

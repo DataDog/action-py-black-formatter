@@ -13,6 +13,7 @@ jobs:
       - uses: ./
         id: black_format
         with:
+          black_args: "--check --diff"
           fail_on_error: "false"
       - name: Check if code is left untouched (not formatted)
         run: |
