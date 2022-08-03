@@ -13,6 +13,7 @@ jobs:
       - uses: ./
         id: black_format
         with:
+          black_args: ""
           fail_on_error: "false"
       - name: Check if code is left untouched (not formatted)
         run: |
@@ -40,7 +41,7 @@ jobs:
       - uses: ./
         id: black_format
         with:
-          black_args: "."
+          black_args: ""
           fail_on_error: "false"
       - name: Check if formatting was successful
         run: |
