@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: rickstaa/action-black@v1
+      - uses: datadog/action-py-black-formatter@v1
         with:
           black_args: ". --check"
 ```
