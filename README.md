@@ -52,7 +52,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Check files using the black formatter
-        uses: DataDog/action-py-black-formatter@v1
+        uses: datadog/action-py-black-formatter@v1
         id: action_black
         with:
           black_args: "."
@@ -77,7 +77,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Check files using the black formatter
-        uses: DataDog/action-py-black-formatter@v1
+        uses: datadog/action-py-black-formatter@v1
         id: action_black
         with:
           black_args: "."
