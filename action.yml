@@ -11,6 +11,11 @@ inputs:
       Exit code when black formatting errors are found [true, false]. Defaults to 'true'.
     required: false
     default: "true"
+  black_main_branch:
+    description: |
+      Main branch of the repository to speed up incremental diff
+    required: false
+    default: "main"
 outputs:
   is_formatted:
     description: "Whether the files were formatted using the black formatter."
