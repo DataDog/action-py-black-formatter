@@ -1,5 +1,20 @@
 #!/bin/bash
 set -e # Increase bash strictness
+
+GIT_HASH_HEAD_REF="$(git rev-parse HEAD)"
+# deepen git history just enough from a shallow clone
+while [ -z $( git merge-base origin/${INPUT_BLACK_MAIN_BRANCH} "$GIT_HASH_HEAD_REF") ]; do
+    git fetch -q --deepen=10 origin ${INPUT_BLACK_MAIN_BRANCH} "$GIT_HASH_HEAD_REF";
+done
+# get changed files
+git diff --diff-filter=d --name-only "$(git merge-base origin/${INPUT_BLACK_MAIN_BRANCH} "$GIT_HASH_HEAD_REF")".."$GIT_HASH_HEAD_REF" > /tmp/files_changed.txt
+# Then filter the list to contain just feature flag file changes
+cat /tmp/files_changed.txt | { grep "*.py$" || true; } > /tmp/changed_python_files.txt
+# print these out
+cat /tmp/changed_python_files.txt
+# Then run the script to find invalid feature flag configurations
+
+
 set -o pipefail
 
 # If no arguments are given use current working directory
@@ -43,7 +58,7 @@ done
 
 black_exit_val="0"
 echo "[action-black] ${black_print_str} python code using the black formatter..."
-black_output="$(black ${black_args_tmp[*]} 2>&1)" || black_exit_val="$?"
+black_output="$(cat /tmp/changed_python_files.txt | xargs black ${black_args_tmp[*]} 2>&1)" || black_exit_val="$?"
 if [[ "${quiet}" != 'true' ]]; then
   echo "${black_output}"
 fi
