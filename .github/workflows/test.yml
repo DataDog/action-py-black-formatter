@@ -13,7 +13,8 @@ jobs:
       - uses: ./
         id: black_format
         with:
-          black_args: "--check --diff"
+          check_mode: "true"
+          print_diff_mode: "true"
           fail_on_error: "false"
       - name: Check if code is left untouched (not formatted)
         run: |
@@ -41,7 +42,6 @@ jobs:
       - uses: ./
         id: black_format
         with:
-          black_args: "."
           fail_on_error: "false"
       - name: Check if formatting was successful
         run: |

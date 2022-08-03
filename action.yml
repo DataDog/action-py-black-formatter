@@ -2,8 +2,8 @@ name: "Run black19.10b0 formatter"
 description: "Run the black formatter on your codebase to improve code review experience."
 author: "Rick Staa"
 inputs:
-  black_args:
-    description: "Black input arguments."
+  additional_args:
+    description: "Black additional input arguments."
     required: false
     default: ""
   fail_on_error:
@@ -11,11 +11,34 @@ inputs:
       Exit code when black formatting errors are found [true, false]. Defaults to 'true'.
     required: false
     default: "true"
-  black_main_branch:
+  main_branch:
     description: |
       Main branch of the repository to speed up incremental diff
     required: false
     default: "main"
+  quiet_mode:
+    description: |
+      (--quiet) Don't emit non-error messages to stderr. Errors are still emitted; silence 
+        those with 2>/dev/null
+    required: false
+    default: "false"
+  print_diff_mode:
+    description: |
+      (--diff) Don't write the files back, just output a diff for each file on stdout.
+    required: false
+    default: "false"
+  check_mode:
+    description: |
+      (--check) Don't write the files back, just return the status. Return code 0 means nothing 
+        would change. Return code 1 means some files would be reformatted. Return code 123 means
+        there was an internal error.
+    required: false
+    default: "false"
+  only_changed_files:
+    description: |
+      Turn on if you only want to check changed files instead of all files.
+    required: false
+    default: "false"
 outputs:
   is_formatted:
     description: "Whether the files were formatted using the black formatter."
