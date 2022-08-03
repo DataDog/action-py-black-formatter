@@ -1,4 +1,4 @@
-name: "Run black formatter"
+name: "Run black19.10b0 formatter"
 description: "Run the black formatter on your codebase to improve code review experience."
 author: "Rick Staa"
 inputs:
