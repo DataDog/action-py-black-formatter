@@ -132,6 +132,7 @@ def main(config):
         )
     else:
         retcode, stdout = invoke_black_on_all_files(invocation_args)
+    stdout = str(stdout) or ""
 
     if not config.quiet_mode:
         print(stdout)
