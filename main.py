@@ -85,20 +85,22 @@ def invoke_black_on_changed_files(args, changed_python_files):
     process = subprocess.run(
         cmd,
         stdout=subprocess.PIPE,
-        stderr=sys.stderr.buffer,
+        stderr=subprocess.PIPE,
         universal_newlines=True,
     )
-    return process.returncode, process.stdout
+    all_output = str(process.stdout or "") + str(process.stderr or "")
+    return process.returncode, all_output
 
 
 def invoke_black_on_all_files(args):
     process = subprocess.run(
         ["black"] + args + ["."],
         stdout=subprocess.PIPE,
-        stderr=sys.stderr.buffer,
+        stderr=subprocess.PIPE,
         universal_newlines=True,
     )
-    return process.returncode, process.stdout
+    all_output = str(process.stdout or "") + str(process.stderr or "")
+    return process.returncode, all_output
 
 
 def main(config):
