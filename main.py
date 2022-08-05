@@ -43,7 +43,7 @@ def get_merge_base(main_branch, head_commit):
 def deepen_shallow_commit(main_branch, head_commit):
     while get_merge_base(main_branch, head_commit) == "":
         process = subprocess.run(
-            ["git", "fetch", "-q" "--deepen=10", "origin", main_branch, head_commit],
+            ["git", "fetch", "-q", "--deepen=10", "origin", main_branch, head_commit],
             stdout=sys.stderr.buffer,
             stderr=sys.stderr.buffer,
             universal_newlines=True,
