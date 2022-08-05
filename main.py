@@ -40,21 +40,8 @@ def get_merge_base(main_branch, head_commit):
     return process.stdout
 
 
-def deepen_shallow_commit(main_branch, head_commit):
-    while get_merge_base(main_branch, head_commit) == "":
-        process = subprocess.run(
-            ["git", "fetch", "-q", "--deepen=10", "origin", main_branch, head_commit],
-            stdout=sys.stderr.buffer,
-            stderr=sys.stderr.buffer,
-            universal_newlines=True,
-        )
-        if process.returncode != 0:
-            raise Exception(f"unhandled git fetch error: {repr(process)}")
-
-
 def get_changed_files(main_branch):
     head_commit = get_head_commit()
-    deepen_shallow_commit(main_branch, head_commit)
     merge_base = get_merge_base(main_branch, head_commit)
     process = subprocess.run(
         [
