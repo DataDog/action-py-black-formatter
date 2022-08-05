@@ -137,7 +137,8 @@ def main(config):
     stdout = str(stdout) or ""
 
     if not config.quiet_mode:
-        print(stdout)
+        for line in stdout.split("\n"):
+            print(f"[action-black][process:black] {line}")
 
     is_error = False
     if not is_formatting:
