@@ -1,6 +1,6 @@
-name: "Run black19.10b0 formatter"
+name: "Run python black code formatter"
 description: "Run the black formatter on your codebase to improve code review experience."
-author: "Rick Staa"
+author: "DataDog"
 inputs:
   additional_args:
     description: "Black additional input arguments."
