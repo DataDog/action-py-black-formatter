@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: datadog/action-py-black-formatter@v1
+      - uses: datadog/action-py-black-formatter@v2.1
         with:
           check_mode: "true"
 ```
@@ -72,7 +72,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Check files using the black formatter
-        uses: datadog/action-py-black-formatter@v1
+        uses: datadog/action-py-black-formatter@v2.1
         id: action_black
       - name: Annotate diff changes using reviewdog
         if: steps.action_black.outputs.is_formatted == 'true'
@@ -95,7 +95,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Check files using the black formatter
-        uses: datadog/action-py-black-formatter@v1
+        uses: datadog/action-py-black-formatter@v2.1
         id: action_black
       - name: Create Pull Request
         if: steps.action_black.outputs.is_formatted == 'true'
