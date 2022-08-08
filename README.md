@@ -17,18 +17,38 @@ jobs:
       - uses: actions/checkout@v2
       - uses: datadog/action-py-black-formatter@v1
         with:
-          black_args: ". --check"
+          check_mode: "true"
 ```
 
 ## Inputs
 
-### `black_args`
+### `additional_args`
 
-**optional**: Black input arguments. Defaults to `. --check --diff`.
+**optional**: Black additional input arguments. Default `""`.
+
+### `only_changed_files`
+
+**optional**: When enabled if you only want to check changed files instead of all files. Recommended for large repositories. Default `"false"`.
+
+### `main_branch`
+
+**optional**: Default main branch to compare if `only_changed_files` mode enabled. Default `"main"`.
+
+### `quiet_mode`
+
+**optional**: (--quiet) Don't emit non-error messages to stderr. Errors are still emitted; silence those with 2>/dev/null. Default `"false"`.
+
+### `check_mode`
+
+**optional**: (--check) Don't write the files back, just return the status. Return code 0 means nothing  would change. Return code 1 means some files would be reformatted. Return code 123 means there was an internal error. Default `"false"`
+
+### `print_diff_mode`
+
+**optional**: (--diff) Don't write the files back, just output a diff for each file on stdout. Default `"false"`.
 
 ### `fail_on_error`
 
-**optional**: Exit code when black formatting errors are found \[true, false]. Defaults to 'true'.
+**optional**: Exit code when black formatting errors are found \[true, false]. Default `"true"`.
 
 ## Outputs
 
@@ -54,8 +74,6 @@ jobs:
       - name: Check files using the black formatter
         uses: datadog/action-py-black-formatter@v1
         id: action_black
-        with:
-          black_args: "."
       - name: Annotate diff changes using reviewdog
         if: steps.action_black.outputs.is_formatted == 'true'
         uses: reviewdog/action-suggester@v1
@@ -79,8 +97,6 @@ jobs:
       - name: Check files using the black formatter
         uses: datadog/action-py-black-formatter@v1
         id: action_black
-        with:
-          black_args: "."
       - name: Create Pull Request
         if: steps.action_black.outputs.is_formatted == 'true'
         uses: peter-evans/create-pull-request@v3
