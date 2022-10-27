@@ -24,6 +24,7 @@ def get_head_commit():
         stdout=subprocess.PIPE,
         stderr=sys.stderr.buffer,
         universal_newlines=True,
+        shell=True,
     )
     if process.returncode != 0:
         raise Exception(f"unexpected non-zero return code from git: {repr(process)}")
@@ -36,6 +37,7 @@ def get_merge_base(main_branch, head_commit):
         stdout=subprocess.PIPE,
         stderr=sys.stderr.buffer,
         universal_newlines=True,
+        shell=True,
     )
     return process.stdout
 
@@ -54,6 +56,7 @@ def get_changed_files(main_branch):
         stdout=subprocess.PIPE,
         stderr=sys.stderr.buffer,
         universal_newlines=True,
+        shell=True,
     )
     changed_python_files = []
     for f in process.stdout.splitlines():
@@ -74,6 +77,7 @@ def invoke_black_on_changed_files(args, changed_python_files):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         universal_newlines=True,
+        shell=True,
     )
     all_output = str(process.stdout or "") + str(process.stderr or "")
     return process.returncode, all_output
@@ -85,6 +89,7 @@ def invoke_black_on_all_files(args):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         universal_newlines=True,
+        shell=True,
     )
     all_output = str(process.stdout or "") + str(process.stderr or "")
     return process.returncode, all_output
