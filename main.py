@@ -20,7 +20,7 @@ Config = namedtuple(
 
 def get_head_commit():
     process = subprocess.run(
-        ["git", "rev-parse", "HEAD"],
+        "git rev-parse HEAD",
         stdout=subprocess.PIPE,
         stderr=sys.stderr.buffer,
         universal_newlines=True,
@@ -33,7 +33,7 @@ def get_head_commit():
 
 def get_merge_base(main_branch, head_commit):
     process = subprocess.run(
-        ["git", "merge-base", f"origin/{main_branch}", head_commit],
+        f"git merge-base origin/{main_branch} {head_commit}",
         stdout=subprocess.PIPE,
         stderr=sys.stderr.buffer,
         universal_newlines=True,
@@ -46,13 +46,7 @@ def get_changed_files(main_branch):
     head_commit = get_head_commit()
     merge_base = get_merge_base(main_branch, head_commit)
     process = subprocess.run(
-        [
-            "git",
-            "diff",
-            "--diff-filter=d",
-            "--name-only",
-            f"{merge_base}..{head_commit}",
-        ],
+        f"git diff --diff-filter=d --name-only {merge_base}..{head_commit}",
         stdout=subprocess.PIPE,
         stderr=sys.stderr.buffer,
         universal_newlines=True,
@@ -72,6 +66,7 @@ def invoke_black_on_changed_files(args, changed_python_files):
         f.writelines(changed_python_files)
 
     cmd = ["cat", "/tmp/changed_python_files.txt", "|", "xargs", "black"] + args
+    cmd = " ".join(cmd)
     process = subprocess.run(
         cmd,
         stdout=subprocess.PIPE,
@@ -84,8 +79,10 @@ def invoke_black_on_changed_files(args, changed_python_files):
 
 
 def invoke_black_on_all_files(args):
+    cmd = ["black"] + args + ["."]
+    cmd = " ".join(cmd)
     process = subprocess.run(
-        ["black"] + args + ["."],
+        cmd,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         universal_newlines=True,
