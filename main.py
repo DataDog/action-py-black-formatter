@@ -47,6 +47,7 @@ def get_changed_files(main_branch, base_commit):
     head_commit = get_head_commit()
     if not base_commit:
         base_commit = get_merge_base(main_branch, head_commit)
+    print(f"[action-black] Formatting files between {base_commit} and {head_commit}")
     process = subprocess.run(
         f"git diff --diff-filter=d --name-only {base_commit}..{head_commit}",
         stdout=subprocess.PIPE,
