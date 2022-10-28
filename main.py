@@ -115,7 +115,7 @@ def main(config):
         action_msg_mode += " (all files)"
 
     if config.additional_args:
-        invocation_args.expand(config.additional_args.split(" "))
+        invocation_args.extend(config.additional_args.split(" "))
 
     print(f"[action-black] {action_msg_mode} python code using the black formatter...")
     if config.only_changed_files:
