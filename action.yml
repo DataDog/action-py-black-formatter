@@ -39,6 +39,11 @@ inputs:
       Turn on if you only want to check changed files instead of all files.
     required: false
     default: "false"
+  base_commit:
+    description: |
+      Sha of the commit to compare files to.
+    required: false
+    default: ""
 outputs:
   is_formatted:
     description: "Whether the files were formatted using the black formatter."

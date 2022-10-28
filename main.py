@@ -13,6 +13,7 @@ Config = namedtuple(
         "print_diff_mode",
         "main_branch",
         "only_changed_files",
+        "base_commit",
         "additional_args",
     ],
 )
@@ -28,7 +29,7 @@ def get_head_commit():
     )
     if process.returncode != 0:
         raise Exception(f"unexpected non-zero return code from git: {repr(process)}")
-    return process.stdout
+    return process.stdout.replace("\n", "")
 
 
 def get_merge_base(main_branch, head_commit):
@@ -39,14 +40,16 @@ def get_merge_base(main_branch, head_commit):
         universal_newlines=True,
         shell=True,
     )
-    return process.stdout
+    return process.stdout.replace("\n", "")
 
 
-def get_changed_files(main_branch):
+def get_changed_files(main_branch, base_commit):
     head_commit = get_head_commit()
-    merge_base = get_merge_base(main_branch, head_commit)
+    if not base_commit:
+        base_commit = get_merge_base(main_branch, head_commit)
+    print(f"[action-black] Formatting files between {base_commit} and {head_commit}")
     process = subprocess.run(
-        f"git diff --diff-filter=d --name-only {merge_base}..{head_commit}",
+        f"git diff --diff-filter=d --name-only {base_commit}..{head_commit}",
         stdout=subprocess.PIPE,
         stderr=sys.stderr.buffer,
         universal_newlines=True,
@@ -113,11 +116,11 @@ def main(config):
         action_msg_mode += " (all files)"
 
     if config.additional_args:
-        invocation_args.expand(config.additional_args.split(" "))
+        invocation_args.extend(config.additional_args.split(" "))
 
     print(f"[action-black] {action_msg_mode} python code using the black formatter...")
     if config.only_changed_files:
-        changed_python_files = get_changed_files(config.main_branch)
+        changed_python_files = get_changed_files(config.main_branch, config.base_commit)
         retcode, stdout = invoke_black_on_changed_files(
             invocation_args, changed_python_files
         )
@@ -144,7 +147,7 @@ def main(config):
             print(
                 f"[action-black] ERROR: (non-formatting) Something went wrong while trying to run the black formatter (error code: {retcode})."
             )
-            os.exit(1)
+            sys.exit(1)
     else:
         # Check if black formatted files
         matcher = re.compile(r"\s?[0-9]+\sfiles?\sreformatted(\.|,)\s?")
@@ -167,10 +170,10 @@ def main(config):
             print(
                 f"[action-black] ERROR: (formatting) Something went wrong while trying to run the black formatter (error code: {retcode})."
             )
-            os.exit(1)
+            sys.exit(1)
 
     if config.fail_on_error and is_error:
-        os.exit(1)
+        sys.exit(1)
 
 
 def env_bool(variable_name, default_value):
@@ -191,6 +194,7 @@ if __name__ == "__main__":
         print_diff_mode=env_bool("print_diff_mode", True),
         main_branch=env("main_branch", "main"),
         only_changed_files=env_bool("only_changed_files", False),
+        base_commit=env("base_commit", ""),
         additional_args=env("additional_args", ""),
     )
     print(f"[action-black] configuration: {config}")
