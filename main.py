@@ -29,7 +29,7 @@ def get_head_commit():
     )
     if process.returncode != 0:
         raise Exception(f"unexpected non-zero return code from git: {repr(process)}")
-    return process.stdout
+    return process.stdout.replace("\n", "")
 
 
 def get_merge_base(main_branch, head_commit):
@@ -40,7 +40,7 @@ def get_merge_base(main_branch, head_commit):
         universal_newlines=True,
         shell=True,
     )
-    return process.stdout
+    return process.stdout.replace("\n", "")
 
 
 def get_changed_files(main_branch, base_commit):
