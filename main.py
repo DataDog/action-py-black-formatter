@@ -146,7 +146,7 @@ def main(config):
             print(
                 f"[action-black] ERROR: (non-formatting) Something went wrong while trying to run the black formatter (error code: {retcode})."
             )
-            os.exit(1)
+            sys.exit(1)
     else:
         # Check if black formatted files
         matcher = re.compile(r"\s?[0-9]+\sfiles?\sreformatted(\.|,)\s?")
@@ -169,10 +169,10 @@ def main(config):
             print(
                 f"[action-black] ERROR: (formatting) Something went wrong while trying to run the black formatter (error code: {retcode})."
             )
-            os.exit(1)
+            sys.exit(1)
 
     if config.fail_on_error and is_error:
-        os.exit(1)
+        sys.exit(1)
 
 
 def env_bool(variable_name, default_value):
