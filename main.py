@@ -66,7 +66,7 @@ def invoke_black_on_changed_files(args, changed_python_files):
     if not changed_python_files:
         return 0, ""
     with open("/tmp/changed_python_files.txt", "w") as f:
-        f.writelines(changed_python_files)
+        f.writelines([file_path + "\n" for file_path in changed_python_files])
 
     cmd = ["cat", "/tmp/changed_python_files.txt", "|", "xargs", "black"] + args
     cmd = " ".join(cmd)
