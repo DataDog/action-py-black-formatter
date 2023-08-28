@@ -143,7 +143,7 @@ def main(config):
             print(
                 f"[action-black] ERROR: (non-formatting) Black found a syntax error when checking the files (error code: {retcode})."
             )
-        else:
+        elif retcode != 0:
             print(
                 f"[action-black] ERROR: (non-formatting) Something went wrong while trying to run the black formatter (error code: {retcode})."
             )
